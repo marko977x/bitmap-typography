@@ -1,0 +1,19 @@
+#logo-link {
+    max-width: 30%;
+    height: auto;
+}
+
+.sidebar {
+    flex-basis: 30%;
+}
+
+.content {
+    flex-basis: 70%;
+}
+
+.letter-window {
+    height: 150px;
+    width: 150px;
+    min-width: 100px;
+    min-height: 100px;
+}

@@ -1,13 +1,10 @@
-.sheet-row {
-    height: 20%;
-}
-
 .sheet {
-    width: 10%;
+    width: 12%;
     margin: 1%;
     background-color: white;
 }
 
 .cell {
     background-color: snow;
+    border: 1px solid lightblue;
 }

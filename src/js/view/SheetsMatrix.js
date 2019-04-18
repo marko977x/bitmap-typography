@@ -1,5 +1,6 @@
 import { execute } from "../executor";
 import { sheetsMatrixControl } from "../services/sheetMatrixService";
+import { fromEvent } from "rxjs";
 
 export class SheetsMatrix {
 
@@ -7,8 +8,7 @@ export class SheetsMatrix {
         this.container = document.querySelector(".sheets-container");
         appStateStream.subscribe(appState => {
             this.state = appState;
-            this.render();
-            console.log(this.state);
+            if (!appState.appIsLoaded) this.render();
         });
 
         window.onload = () => {
@@ -42,6 +42,20 @@ export class SheetsMatrix {
         const sheet = document.createElement("div");
         sheet.className = "sheet border border-dark";
         sheet.id = id;
+
+        fromEvent(sheet, 'mouseenter').subscribe(() => {
+            execute(sheetsMatrixControl, {
+                action: "onMouseOverSheet",
+                parameters: [this.state, parseInt(container.id), id]
+            });
+        });
+
+        fromEvent(sheet, 'mouseleave').subscribe(() => {
+            execute(sheetsMatrixControl, {
+                action: "onMouseOutSheet",
+                parameters: [this.state]
+            });
+        });
 
         this.createCells(sheet);
 

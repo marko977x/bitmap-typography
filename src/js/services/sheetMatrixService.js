@@ -1,7 +1,10 @@
 import { stream } from "../index";
 
 export const sheetsMatrixControl = {
-    onLoadWindow
+    onLoadWindow,
+    onClickSheet,
+    onMouseOverSheet,
+    onMouseOutSheet
 };
 
 const ASCII_START_LETTER = 97;
@@ -20,6 +23,34 @@ function onLoadWindow(appState) {
             })
         })
     })
+    appState.appIsLoaded = true;
+    stream.next(appState);
+}
+
+function onClickSheet(appState, row, column) {
+    appState.mouseOverSheet.row = row;
+    appState.mouseOverSheet.column = column;
+    appState.mouseOverSheet.letter = appState.sheetsMatrix.sheets[
+        row * appState.sheetsMatrix.columns + column
+    ];
+
+    stream.next(appState);
+}
+
+function onMouseOverSheet(appState, row, column) {
+    appState.mouseOverSheet.row = row;
+    appState.mouseOverSheet.column = column;
+    appState.mouseOverSheet.letter = appState.sheetsMatrix.sheets[
+        row * appState.sheetsMatrix.columns + column
+    ].letter;
+
+    stream.next(appState);
+}
+
+function onMouseOutSheet(appState) {
+    appState.mouseOverSheet.row = -1;
+    appState.mouseOverSheet.column = -1;
+    appState.mouseOverSheet.letter = "";
 
     stream.next(appState);
 }

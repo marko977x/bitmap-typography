@@ -24,8 +24,15 @@ export class AppState {
             letter: ""
         };
 
+        this.clickedSheet = {
+            row: -1,
+            column: -1
+        }
+
         this.cell = {
             isColored: false
         };
+
+        this.appIsLoaded = false;
     }
 }

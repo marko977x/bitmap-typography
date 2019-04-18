@@ -4,11 +4,12 @@
 }
 
 .sidebar {
-    flex-basis: 30%;
+    flex-basis: 25%;
+    padding: 1%;
 }
 
 .sheets-container {
-    flex-basis: 70%;
+    flex-basis: 75%;
     height: 657px;
 }
 
@@ -17,4 +18,12 @@
     width: 150px;
     min-width: 100px;
     min-height: 100px;
+    line-height: 150px;
+    font-size: 500%;
+    text-align: center;
+    background-color: whitesmoke;
+}
+
+.sheet-row {
+    flex-grow: 1;
 }

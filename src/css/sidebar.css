@@ -1,16 +1,12 @@
-#logo-link {
-    max-width: 30%;
-    height: auto;
-}
-
 .sidebar {
     flex-basis: 25%;
     padding: 1%;
 }
 
-.sheets-container {
-    flex-basis: 75%;
-    height: 657px;
+
+#logo-link {
+    max-width: 30%;
+    height: auto;
 }
 
 .letter-window {
@@ -24,6 +20,3 @@
     background-color: whitesmoke;
 }
 
-.sheet-row {
-    flex-grow: 1;
-}

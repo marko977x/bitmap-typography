@@ -1,3 +1,12 @@
+.sheets-container {
+    flex-basis: 75%;
+    height: 657px;
+}
+
+.sheet-row {
+    flex-grow: 1;
+}
+
 .sheet {
     width: 12%;
     margin: 1%;

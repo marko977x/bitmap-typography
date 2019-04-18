@@ -28,9 +28,9 @@ function onLoadWindow(appState) {
 }
 
 function onClickSheet(appState, row, column) {
-    appState.mouseOverSheet.row = row;
-    appState.mouseOverSheet.column = column;
-    appState.mouseOverSheet.letter = appState.sheetsMatrix.sheets[
+    appState.hoveredSheet.row = row;
+    appState.hoveredSheet.column = column;
+    appState.hoveredSheet.letter = appState.sheetsMatrix.sheets[
         row * appState.sheetsMatrix.columns + column
     ];
 
@@ -38,9 +38,9 @@ function onClickSheet(appState, row, column) {
 }
 
 function onMouseOverSheet(appState, row, column) {
-    appState.mouseOverSheet.row = row;
-    appState.mouseOverSheet.column = column;
-    appState.mouseOverSheet.letter = appState.sheetsMatrix.sheets[
+    appState.hoveredSheet.row = row;
+    appState.hoveredSheet.column = column;
+    appState.hoveredSheet.letter = appState.sheetsMatrix.sheets[
         row * appState.sheetsMatrix.columns + column
     ].letter;
 
@@ -48,9 +48,9 @@ function onMouseOverSheet(appState, row, column) {
 }
 
 function onMouseOutSheet(appState) {
-    appState.mouseOverSheet.row = -1;
-    appState.mouseOverSheet.column = -1;
-    appState.mouseOverSheet.letter = "";
+    appState.hoveredSheet.row = -1;
+    appState.hoveredSheet.column = -1;
+    appState.hoveredSheet.letter = "";
 
     stream.next(appState);
 }

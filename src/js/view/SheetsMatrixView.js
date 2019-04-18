@@ -3,7 +3,7 @@ import { sheetsMatrixControl } from "../services/sheetMatrixService";
 import { fromEvent } from "rxjs";
 import { filter } from "rxjs/operators";
 
-export class SheetsMatrix {
+export class SheetsMatrixView {
 
     constructor(appStateStream) {
         this.container = document.querySelector(".sheets-container");
@@ -25,11 +25,11 @@ export class SheetsMatrix {
 
     render() {
         this.container.innerHTML = "";
-        for (let row = 0; row < this.state.sheetsMatrix.rows; row++) {
+        let matrix = this.state.sheetsMatrix;
+        for (let row = 0; row < matrix.rows; row++) {
             const rowContainer = this.appendRow(this.container, row)
-            for (let column = 0; column < this.state.sheetsMatrix.columns; column++) {
-                if (row * this.state.sheetsMatrix.columns + column + 1 <=
-                    this.state.sheetsMatrix.count)
+            for (let column = 0; column < matrix.columns; column++) {
+                if (row * matrix.columns + column + 1 <= matrix.count)
                     this.createSheet(rowContainer, column);
             }
         }
@@ -48,14 +48,18 @@ export class SheetsMatrix {
         sheet.className = "sheet border border-dark";
         sheet.id = id;
 
-        fromEvent(sheet, 'mouseenter').subscribe(() => {
+        fromEvent(sheet, 'mouseenter').pipe(
+            filter(() => this.state.sheetsMatrix.sheets.length != 0)
+        ).subscribe(() => {
             execute(sheetsMatrixControl, {
                 action: "onMouseOverSheet",
                 parameters: [this.state, parseInt(container.id), id]
             });
         });
 
-        fromEvent(sheet, 'mouseleave').subscribe(() => {
+        fromEvent(sheet, 'mouseleave').pipe(
+            filter(() => this.state.sheetsMatrix.sheets.length != 0)  
+        ).subscribe(() => {
             execute(sheetsMatrixControl, {
                 action: "onMouseOutSheet",
                 parameters: [this.state]

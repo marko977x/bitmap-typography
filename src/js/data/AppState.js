@@ -18,7 +18,7 @@ export class AppState {
             column: -1
         };
 
-        this.mouseOverSheet = {
+        this.hoveredSheet = {
             row: -1,
             column: -1,
             letter: ""

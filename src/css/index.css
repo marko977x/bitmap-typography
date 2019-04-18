@@ -7,8 +7,9 @@
     flex-basis: 30%;
 }
 
-.content {
+.sheets-container {
     flex-basis: 70%;
+    height: 657px;
 }
 
 .letter-window {

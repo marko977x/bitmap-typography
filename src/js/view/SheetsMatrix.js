@@ -1,14 +1,18 @@
 import { execute } from "../executor";
 import { sheetsMatrixControl } from "../services/sheetMatrixService";
 import { fromEvent } from "rxjs";
+import { filter } from "rxjs/operators";
 
 export class SheetsMatrix {
 
     constructor(appStateStream) {
         this.container = document.querySelector(".sheets-container");
-        appStateStream.subscribe(appState => {
+
+        appStateStream.pipe(
+            filter(appState => !appState.appIsLoaded)
+        ).subscribe(appState => {
             this.state = appState;
-            if (!appState.appIsLoaded) this.render();
+            this.render();
         });
 
         window.onload = () => {
@@ -24,7 +28,8 @@ export class SheetsMatrix {
         for (let row = 0; row < this.state.sheetsMatrix.rows; row++) {
             const rowContainer = this.appendRow(this.container, row)
             for (let column = 0; column < this.state.sheetsMatrix.columns; column++) {
-                if (row * this.state.sheetsMatrix.columns + column + 1 <= this.state.sheetsMatrix.count)
+                if (row * this.state.sheetsMatrix.columns + column + 1 <=
+                    this.state.sheetsMatrix.count)
                     this.createSheet(rowContainer, column);
             }
         }

@@ -1,23 +1,28 @@
+import { map, filter } from "rxjs/operators";
+import { merge } from "rxjs";
+
 export class Sheet {
 
     constructor(appStateStream) {
         this.letterWindow = document.querySelector(".letter-window");
 
-        appStateStream.subscribe(appState => {
-            this.state = appState;
-            this.render();
-        })
+        const hoveredLetter = appStateStream.pipe(
+            filter(state => state.mouseOverSheet.row != -1),
+            map((state) => {
+                const sheet = state.mouseOverSheet;
+                return state.sheetsMatrix.sheets[
+                    sheet.row * state.sheetsMatrix.columns + sheet.column].letter
+            }));
+
+        const noHoveredLetter = appStateStream.pipe(
+            filter(state => state.mouseOverSheet.row == -1),
+            map(() => ""));
+
+        merge(hoveredLetter, noHoveredLetter).subscribe(
+            value => this.setLetterWindow(value));
     }
 
-    render() {
-        if (this.state.mouseOverSheet.row != -1) {
-            const sheet = this.state.mouseOverSheet;
-            this.letterWindow.innerHTML = this.state.sheetsMatrix.sheets[
-                sheet.row * this.state.sheetsMatrix.columns + sheet.column
-            ].letter;
-        }
-        else {
-            this.letterWindow.innerHTML = "";
-        }
+    setLetterWindow(value) {
+        this.letterWindow.innerHTML = value;
     }
 }

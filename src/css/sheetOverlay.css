@@ -1,0 +1,53 @@
+.sheet-overlay {
+  position: fixed;
+  width: 100%;
+  height: 0%;
+  top: 0; 
+  left: 0;
+  background-color: rgba(0,0,0,0.9);
+  z-index: 1;
+  transition: 0.5s;
+  overflow-x: hidden;
+}
+
+.so-letter-container {
+    display: flex;
+    flex-basis: 25%;
+    justify-content: flex-end;
+    margin-top: 5%;
+}
+
+.so-letter-window {
+    height: 100px;
+    width: 100px;
+    line-height: 100px;
+    font-size: 400%;
+    text-align: center;
+    background-color: whitesmoke;
+    border-radius: 10%;
+}
+
+.so-board-container{
+    flex-basis: 50%;
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+}
+
+.so-board {
+    height: 85%;
+    width: 70%;
+    border: 2px solid white;
+    border-radius: 1%;
+}
+
+.so-options {
+    flex-basis: 25%;
+    margin-top: 5%;
+}
+
+.delete-button, .exit-button, .next-button, .previous-button {
+    margin: 0% 5% 5% 0%;
+    width: 40%;
+    border: 2px solid white;
+}

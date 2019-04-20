@@ -60,7 +60,7 @@ export class SheetView {
 
     updateSheet(state, sheet) {
         sheet.childNodes.forEach(cellRow => {
-           this.updateCellRow(state, sheet, cellRow); 
+            this.updateCellRow(state, sheet, cellRow);
         });
     }
 

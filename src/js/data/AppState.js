@@ -9,8 +9,8 @@ export class AppState {
         };
 
         this.sheet = {
-            rows: 15,
-            columns: 10,
+            rows: 4,
+            columns: 4,
         };
 
         this.openedSheet = {

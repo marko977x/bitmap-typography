@@ -6,7 +6,7 @@
   left: 0;
   background-color: rgba(0,0,0,0.9);
   z-index: 1;
-  transition: 0.3s;
+  transition: 1s;
   overflow-x: hidden;
 }
 
@@ -35,8 +35,8 @@
 }
 
 .so-board {
-    height: 525px;
-    width: 350px;
+    height: 400px;
+    width: 400px;
     border: 2px solid white;
     border-radius: 1%;
 }

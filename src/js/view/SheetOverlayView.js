@@ -26,16 +26,19 @@ export class SheetOverlayView {
 
     render(state) {
         this.board.innerHTML = "";
-        const openedSheet = state.sheetsMatrix.sheets[state.openedSheet.row *
-            state.sheetsMatrix.columns + state.openedSheet.column];
-
+        this.createCells(state);
         this.sheetOverlay.style.height = "100%";
+    }
 
+    createCells(state) {
         for (let row = 0; row < state.sheet.rows; row++) {
             const rowContainer = this.appendRow(this.board, row);
             for (let column = 0; column < state.sheet.columns; column++) {
-                this.createCell(rowContainer, column,
-                    openedSheet.cells[row * state.sheet.columns + column]);
+                const cellData = state.getCell(
+                    { row: state.openedSheet.row, column: state.openedSheet.column },
+                    { row: row, column: column }
+                );
+                this.createCell(rowContainer, column, cellData);
             }
         }
     }

@@ -9,9 +9,7 @@ export const sheetsMatrixControl = {
 function onMouseEnterSheet(appState, row, column) {
     appState.hoveredSheet.row = row;
     appState.hoveredSheet.column = column;
-    appState.hoveredSheet.letter = appState.sheetsMatrix.sheets[
-        row * appState.sheetsMatrix.columns + column
-    ].letter;
+    appState.hoveredSheet.letter = appState.getSheet(row, column).letter;
 
     appStateStream$.next(appState);
 }

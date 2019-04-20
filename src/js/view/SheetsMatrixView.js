@@ -15,8 +15,6 @@ export class SheetsMatrixView {
             this.state = appState;
             this.render();
         });
-
-        this.onLoadWindow();
     }
 
     render() {
@@ -53,8 +51,6 @@ export class SheetsMatrixView {
         this.onMouseLeaveSheet(sheet);
         this.onMouseClickSheet(sheet, parseInt(container.id), id);
 
-        this.createCells(sheet);
-
         container.appendChild(sheet);
         return sheet;
     }
@@ -90,41 +86,5 @@ export class SheetsMatrixView {
                 parameters: [this.state, row, column]
             });
         });
-    }
-
-    createCells(container) {
-        for (let row = 0; row < this.state.sheet.rows; row++) {
-            const rowContainer = this.createCellsRow(container, row)
-            rowContainer.className = "cell-row";
-            for (let column = 0; column < this.state.sheet.columns; column++) {
-                this.createCell(rowContainer, column);
-            }
-        }
-    }
-
-    createCellsRow(container, id) {
-        const row = document.createElement("div");
-        row.className = "cell-row";
-        row.style.height = 100 / this.state.sheet.rows + '%';
-        row.id = id;
-        container.appendChild(row);
-        return row;
-    }
-
-    createCell(container, id) {
-        const cell = document.createElement("div");
-        cell.className = "cell";
-        cell.id = id;
-        cell.style.width = 100 / this.state.sheet.columns + '%';
-        container.appendChild(cell);
-    }
-
-    onLoadWindow() {
-        fromEvent(window, 'onload').subscribe(
-            execute(sheetsMatrixControl, {
-                action: "onLoadWindow",
-                parameters: [this.state]
-            })
-        );
     }
 }

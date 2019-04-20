@@ -1,32 +1,55 @@
 import { map, filter } from "rxjs/operators";
-import { merge } from "rxjs";
 
 export class SheetView {
 
     constructor(appStateStream) {
         this.letterWindow = document.querySelector(".letter-window");
 
+        appStateStream.pipe(
+            filter(state => !state.appIsLoaded)
+        ).subscribe(appState => {
+            this.state = appState;
+            this.render();
+        });
+
         this.handleHoveringOverSheet(appStateStream);
     }
 
-    handleHoveringOverSheet(appStateStream) {
-        const hoveredLetter = appStateStream.pipe(
-            filter(state => state.hoveredSheet.row != -1),
-            map((state) => {
-                const sheet = state.hoveredSheet;
-                return state.sheetsMatrix.sheets[
-                    sheet.row * state.sheetsMatrix.columns + sheet.column].letter;
-            }));
-
-        const noHoveredLetter = appStateStream.pipe(
-            filter(state => state.hoveredSheet.row == -1),
-            map(() => ""));
-
-        merge(hoveredLetter, noHoveredLetter).subscribe(
-            value => this.setLetterWindow(value));
+    render() {
+        document.querySelectorAll(".sheet").forEach(
+            sheet => this.createCells(sheet));
     }
 
-    setLetterWindow(value) {
-        this.letterWindow.innerHTML = value;
+    createCells(sheet) {
+        for (let row = 0; row < this.state.sheet.rows; row++) {
+            const rowContainer = this.createCellRow(sheet, row)
+            rowContainer.className = "cell-row";
+            for (let column = 0; column < this.state.sheet.columns; column++) {
+                this.createCell(rowContainer, column);
+            }
+        }
+    }
+
+    createCellRow(container, id) {
+        const row = document.createElement("div");
+        row.className = "cell-row";
+        row.style.height = 100 / this.state.sheet.rows + '%';
+        row.id = id;
+        container.appendChild(row);
+        return row;
+    }
+
+    createCell(container, id) {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.id = id;
+        cell.style.width = 100 / this.state.sheet.columns + '%';
+        container.appendChild(cell);
+    }
+
+    handleHoveringOverSheet(appStateStream) {
+        appStateStream.pipe(
+            map((state) => state.hoveredSheet.letter)
+        ).subscribe(letter => this.letterWindow.innerHTML = letter);
     }
 }

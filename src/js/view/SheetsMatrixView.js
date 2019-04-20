@@ -5,66 +5,53 @@ import { filter } from "rxjs/operators";
 
 export class SheetsMatrixView {
 
-    constructor(appStateStream) {
+    constructor(appStateStream$, appState) {
         this.container = document.querySelector(".sheets-container");
+        this.state = appState;
 
-        appStateStream.pipe(
+        appStateStream$.pipe(
             filter(appState => !appState.appIsLoaded)
         ).subscribe(appState => {
             this.state = appState;
             this.render();
         });
 
-        window.onload = () => {
-            execute(sheetsMatrixControl, {
-                action: "onLoadWindow",
-                parameters: [this.state]
-            });
-        }
+        this.onLoadWindow();
     }
 
     render() {
         this.container.innerHTML = "";
         let matrix = this.state.sheetsMatrix;
         for (let row = 0; row < matrix.rows; row++) {
-            const rowContainer = this.appendRow(this.container, row)
+            const rowContainer = this.createRow(this.container, row)
             for (let column = 0; column < matrix.columns; column++) {
-                if (row * matrix.columns + column + 1 <= matrix.count)
+                if (this.isMatrixFull(row, column))
                     this.createSheet(rowContainer, column);
             }
         }
     }
 
-    appendRow(container, id) {
+    createRow(container, id) {
         const row = document.createElement("div");
-        row.className = "sheet-row d-flex justify-content-center";
+        row.className = "sheet-row";
         row.id = id;
         container.appendChild(row);
         return row;
     }
 
+    isMatrixFull(row, column) {
+        return row * this.state.sheetsMatrix.columns + column + 1
+            <= this.state.sheetsMatrix.count;
+    }
+
     createSheet(container, id) {
         const sheet = document.createElement("div");
-        sheet.className = "sheet border border-dark";
+        sheet.className = "sheet";
         sheet.id = id;
 
-        fromEvent(sheet, 'mouseenter').pipe(
-            filter(() => this.state.sheetsMatrix.sheets.length != 0)
-        ).subscribe(() => {
-            execute(sheetsMatrixControl, {
-                action: "onMouseOverSheet",
-                parameters: [this.state, parseInt(container.id), id]
-            });
-        });
-
-        fromEvent(sheet, 'mouseleave').pipe(
-            filter(() => this.state.sheetsMatrix.sheets.length != 0)  
-        ).subscribe(() => {
-            execute(sheetsMatrixControl, {
-                action: "onMouseOutSheet",
-                parameters: [this.state]
-            });
-        });
+        this.onMouseEnterSheet(sheet, parseInt(container.id), id);
+        this.onMouseLeaveSheet(sheet);
+        this.onMouseClickSheet(sheet, parseInt(container.id), id);
 
         this.createCells(sheet);
 
@@ -72,21 +59,53 @@ export class SheetsMatrixView {
         return sheet;
     }
 
+    onMouseEnterSheet(sheet, row, column) {
+        fromEvent(sheet, 'mouseenter').pipe(
+            filter(() => this.state.appIsLoaded)
+        ).subscribe(() => {
+            execute(sheetsMatrixControl, {
+                action: "onMouseEnterSheet",
+                parameters: [this.state, row, column]
+            });
+        });
+    }
+
+    onMouseLeaveSheet(sheet) {
+        fromEvent(sheet, 'mouseleave').pipe(
+            filter(() => this.state.appIsLoaded)
+        ).subscribe(() => {
+            execute(sheetsMatrixControl, {
+                action: "onMouseLeaveSheet",
+                parameters: [this.state]
+            });
+        });
+    }
+
+    onMouseClickSheet(sheet, row, column) {
+        fromEvent(sheet, 'click').pipe(
+            filter(() => this.state.appIsLoaded)
+        ).subscribe(() => {
+            execute(sheetsMatrixControl, {
+                action: "onMouseClickSheet",
+                parameters: [this.state, row, column]
+            });
+        });
+    }
+
     createCells(container) {
-        container.className += " d-flex flex-column justify-content-center";
         for (let row = 0; row < this.state.sheet.rows; row++) {
-            const rowContainer = this.appendCellsRow(container, row)
-            rowContainer.className = "d-flex justify-content-center";
+            const rowContainer = this.createCellsRow(container, row)
+            rowContainer.className = "cell-row";
             for (let column = 0; column < this.state.sheet.columns; column++) {
                 this.createCell(rowContainer, column);
             }
         }
     }
 
-    appendCellsRow(container, id) {
+    createCellsRow(container, id) {
         const row = document.createElement("div");
-        row.className = "cell-row d-flex justify-content-center";
-        row.style.height = 100 / this.state.sheet.columns + '%';
+        row.className = "cell-row";
+        row.style.height = 100 / this.state.sheet.rows + '%';
         row.id = id;
         container.appendChild(row);
         return row;
@@ -98,5 +117,14 @@ export class SheetsMatrixView {
         cell.id = id;
         cell.style.width = 100 / this.state.sheet.columns + '%';
         container.appendChild(cell);
+    }
+
+    onLoadWindow() {
+        fromEvent(window, 'onload').subscribe(
+            execute(sheetsMatrixControl, {
+                action: "onLoadWindow",
+                parameters: [this.state]
+            })
+        );
     }
 }

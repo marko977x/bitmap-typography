@@ -6,7 +6,7 @@
   left: 0;
   background-color: rgba(0,0,0,0.9);
   z-index: 1;
-  transition: 0.5s;
+  transition: 0.3s;
   overflow-x: hidden;
 }
 
@@ -35,8 +35,8 @@
 }
 
 .so-board {
-    height: 85%;
-    width: 70%;
+    height: 525px;
+    width: 350px;
     border: 2px solid white;
     border-radius: 1%;
 }
@@ -44,6 +44,15 @@
 .so-options {
     flex-basis: 25%;
     margin-top: 5%;
+}
+
+.so-cell-row {
+    display: flex;
+    justify-content: center;
+}
+
+.so-cell {
+    border: 1px solid #d4d4d4;
 }
 
 .delete-button, .exit-button, .next-button, .previous-button {

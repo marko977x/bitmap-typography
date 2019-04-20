@@ -1,30 +1,55 @@
-import { stream } from "../index";
+import { appStateStream$ } from "../index";
 
 export const sheetsMatrixControl = {
     onLoadWindow,
     onClickSheet,
-    onMouseOverSheet,
-    onMouseOutSheet
+    onMouseEnterSheet,
+    onMouseLeaveSheet,
+    onMouseClickSheet
 };
 
-const ASCII_START_LETTER = 97;
+const LOWER_A_ASCII = 97;
 
 function onLoadWindow(appState) {
-    appState.sheetsMatrix.sheets = [];
     document.querySelectorAll(".sheet-row").forEach(row => {
-        row.childNodes.forEach(sheet => {
-            appState.sheetsMatrix.sheets.push({
-                row: parseInt(row.id),
-                column: parseInt(sheet.id),
-                letter: String.fromCharCode(
-                    ASCII_START_LETTER +
-                    parseInt(row.id) * appState.sheetsMatrix.columns +
-                    parseInt(sheet.id))
+        writeSheetRowDataToAppState(appState, row);
+    });
+
+    appState.appIsLoaded = true;
+    appStateStream$.next(appState);
+}
+
+function writeSheetRowDataToAppState(appState, row) {
+    row.childNodes.forEach(sheet => {
+        writeSheetDataToAppState(appState, sheet, parseInt(row.id));
+    });
+}
+
+function writeSheetDataToAppState(appState, sheet, sheetRow) {
+    let asciiOffset = sheetRow * appState.sheetsMatrix.columns +
+        parseInt(sheet.id);
+
+    appState.sheetsMatrix.sheets.push({
+        row: sheetRow,
+        column: parseInt(sheet.id),
+        letter: String.fromCharCode(LOWER_A_ASCII + asciiOffset),
+        cells: getCells(sheet)
+    });
+}
+
+function getCells(sheet) {
+    const cells = [];
+    sheet.childNodes.forEach(cellRow => {
+        cellRow.childNodes.forEach(cell => {
+            cells.push({
+                row: parseInt(cellRow.id),
+                column: parseInt(cell.id),
+                isColored: false
             })
         })
-    })
-    appState.appIsLoaded = true;
-    stream.next(appState);
+    });
+
+    return cells;
 }
 
 function onClickSheet(appState, row, column) {
@@ -34,23 +59,30 @@ function onClickSheet(appState, row, column) {
         row * appState.sheetsMatrix.columns + column
     ];
 
-    stream.next(appState);
+    appStateStream$.next(appState);
 }
 
-function onMouseOverSheet(appState, row, column) {
+function onMouseEnterSheet(appState, row, column) {
     appState.hoveredSheet.row = row;
     appState.hoveredSheet.column = column;
     appState.hoveredSheet.letter = appState.sheetsMatrix.sheets[
         row * appState.sheetsMatrix.columns + column
     ].letter;
 
-    stream.next(appState);
+    appStateStream$.next(appState);
 }
 
-function onMouseOutSheet(appState) {
+function onMouseLeaveSheet(appState) {
     appState.hoveredSheet.row = -1;
     appState.hoveredSheet.column = -1;
     appState.hoveredSheet.letter = "";
 
-    stream.next(appState);
+    appStateStream$.next(appState);
+}
+
+function onMouseClickSheet(appState, row, column) {
+    appState.openedSheet.row = row;
+    appState.openedSheet.column = column;
+
+    appStateStream$.next(appState);
 }

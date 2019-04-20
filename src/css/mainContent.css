@@ -5,12 +5,23 @@
 
 .sheet-row {
     flex-grow: 1;
+    display: flex;
+    justify-content: center;
 }
 
 .sheet {
     width: 12%;
     margin: 1%;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid gray;
+}
+
+.cell-row {
+    display: flex;
+    justify-content: center;
 }
 
 .cell {

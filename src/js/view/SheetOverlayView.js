@@ -1,5 +1,5 @@
-import { filter } from "rxjs/operators";
-import { fromEvent, combineLatest } from "rxjs";
+import { partition } from "rxjs/operators";
+import { fromEvent } from "rxjs";
 import { execute } from "../executor";
 import { sheetOverlayControl } from "../services/sheetOverlayServices";
 import { CLICKED_CELL_COLOR, DEFAULT_CELL_COLOR } from "../data/constants";
@@ -9,25 +9,34 @@ export class SheetOverlayView {
     constructor(appStateStream$) {
         this.sheetOverlay = document.querySelector(".sheet-overlay");
         this.board = document.querySelector(".so-board");
-        const exitButton = document.querySelector(".exit-button");
+        this.letterWindow = document.querySelector(".so-letter-window");
 
-        appStateStream$.pipe(
-            filter(state => state.sheetOverlayIsShown)
-        ).subscribe(state => {
+        this.handleAppStateStream(appStateStream$);
+        this.defineButtonsEvents();
+    }
+
+    handleAppStateStream(appStateStream$) {
+        const stream$ = appStateStream$.pipe(
+            partition(state => state.sheetOverlayIsShown)
+        );
+
+        const showOverlay = stream$[0];
+        const hideOverlay = stream$[1];
+
+        showOverlay.subscribe(state => {
             this.state = state;
             this.render(state);
-        });
+        })
 
-        exitButton.onclick = () => {
-            this.sheetOverlay.style.height = "0%";
-            this.state.sheetOverlayIsShown = false;
-        }
+        hideOverlay.subscribe(() => this.sheetOverlay.style.height = '0%');
     }
 
     render(state) {
         this.board.innerHTML = "";
         this.createCells(state);
         this.sheetOverlay.style.height = "100%";
+        this.letterWindow.innerHTML = state.getSheet(
+            state.openedSheet.row, state.openedSheet.column).letter;
     }
 
     createCells(state) {
@@ -72,5 +81,23 @@ export class SheetOverlayView {
                 parameters: [this.state, row, column]
             })
         })
+    }
+
+    defineButtonsEvents() {
+        this.onClick("exit-button", "onClickExitButton");
+        this.onClick("delete-button", "onClickDeleteButton");
+        this.onClick("next-button", "onClickNextButton");
+        this.onClick("previous-button", "onClickPreviousButton");
+    }
+
+    onClick(buttonClassName, action) {
+        const button = document.querySelector("." + buttonClassName);
+
+        fromEvent(button, 'click').subscribe(() => {
+            execute(sheetOverlayControl, {
+                action: action,
+                parameters: [this.state]
+            })
+        });
     }
 }

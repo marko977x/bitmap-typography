@@ -25,5 +25,16 @@ export class AppState {
         };
 
         this.appIsLoaded = false;
+        this.sheetOverlayIsShown = false;
+    }
+
+    getSheet(row, column) {
+        return this.sheetsMatrix.sheets[row * this.sheetsMatrix.columns + column];
+    }
+
+    getCell(sheet, cell) {
+        return this.getSheet(sheet.row, sheet.column).cells[
+            cell.row * this.sheet.columns + cell.column
+        ];
     }
 }

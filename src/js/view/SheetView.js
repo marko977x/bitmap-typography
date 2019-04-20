@@ -1,18 +1,23 @@
-import { map, filter } from "rxjs/operators";
+import { partition } from "rxjs/operators";
+import { CLICKED_CELL_COLOR, DEFAULT_CELL_COLOR } from "../data/constants";
 
 export class SheetView {
 
-    constructor(appStateStream) {
-        this.letterWindow = document.querySelector(".letter-window");
+    constructor(appStateStream$) {
+        const stream = appStateStream$.pipe(
+            partition(state => !state.appIsLoaded));
 
-        appStateStream.pipe(
-            filter(state => !state.appIsLoaded)
-        ).subscribe(appState => {
-            this.state = appState;
+        const renderApp = stream[0];
+        const updateSheets = stream[1];
+
+        renderApp.subscribe(state => {
+            this.state = state;
             this.render();
         });
 
-        this.handleHoveringOverSheet(appStateStream);
+        updateSheets.subscribe(state => {
+            this.updateSheets(state)
+        });
     }
 
     render() {
@@ -47,9 +52,30 @@ export class SheetView {
         container.appendChild(cell);
     }
 
-    handleHoveringOverSheet(appStateStream) {
-        appStateStream.pipe(
-            map((state) => state.hoveredSheet.letter)
-        ).subscribe(letter => this.letterWindow.innerHTML = letter);
+    updateSheets(state) {
+        document.querySelectorAll(".sheet").forEach(sheet => {
+            this.updateSheet(state, sheet);
+        });
+    }
+
+    updateSheet(state, sheet) {
+        sheet.childNodes.forEach(cellRow => {
+           this.updateCellRow(state, sheet, cellRow); 
+        });
+    }
+
+    updateCellRow(state, sheet, cellRow) {
+        cellRow.childNodes.forEach(cell => {
+            this.updateCell(state, sheet, cell);
+        });
+    }
+
+    updateCell(state, sheet, cell) {
+        const cellData = state.getCell(
+            { row: parseInt(sheet.parentNode.id), column: parseInt(sheet.id) },
+            { row: parseInt(cell.parentNode.id), column: parseInt(cell.id) }
+        );
+        cell.style.backgroundColor = cellData.isColored ?
+            CLICKED_CELL_COLOR : DEFAULT_CELL_COLOR;
     }
 }

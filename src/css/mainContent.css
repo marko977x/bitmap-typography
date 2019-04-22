@@ -1,6 +1,6 @@
 .sheets-container {
     flex-basis: 75%;
-    height: 657px;
+    height: 650px;
 }
 
 .sheet-row {
@@ -10,17 +10,19 @@
 }
 
 .sheet {
-    width: 12%;
-    margin: 1%;
+    width: 11%;
+    margin: 1.5%;
     background-color: white;
     display: flex;
     flex-direction: column;
     justify-content: center;
     border: 1px solid gray;
+    box-shadow: 5px 5px 5px gray;
 }
 
 .sheet:hover {
     border: 1px solid greenyellow;
+    transform: scale(1.05); 
 }
 
 .cell-row {

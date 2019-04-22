@@ -1,0 +1,56 @@
+.typing-overlay {
+  position: fixed;
+  width: 100%;
+  height: 0%;
+  top: 0; 
+  left: 0;
+  background-color: rgba(0,0,0, 0.9);
+  z-index: 1;
+  transition: 0.5s;
+  overflow-x: hidden;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center
+}
+
+.to-typing-box {
+    flex-basis: 80%;
+    margin-top: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.to-typing-area {
+    min-height: 50%;
+    width: 80%;
+    border: 2px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.to-typing-line {
+    margin-top: 10px;
+    margin-left: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.to-options {
+    flex-basis: 20%;
+    margin-top: 5%;
+    align-content: center;
+}
+
+.to-exit-button, .to-save-button {
+    margin: 0% 5% 5% 0%;
+    width: 60%;
+    border: 2px solid white;
+}
+
+.to-letter { 
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1px;
+}

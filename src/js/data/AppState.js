@@ -24,8 +24,14 @@ export class AppState {
             letter: ""
         };
 
+        this.typedText = {
+            lastAddedSheedIndex: -1,
+            count: 0
+        }
+
         this.appIsLoaded = false;
         this.sheetOverlayIsShown = false;
+        this.typingOverlayIsShown = false;
     }
 
     getSheet(row, column) {

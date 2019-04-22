@@ -19,6 +19,7 @@ function clearSheetBitmap(sheet) {
     });
 }
 
-function onClickStartTyping() {
-
+function onClickStartTyping(appState) {
+    appState.typingOverlayIsShown = true;
+    appStateStream$.next(appState);
 }

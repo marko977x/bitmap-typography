@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../css/mainContent.css">
     <link rel="stylesheet" href="../css/sidebar.css">
     <link rel="stylesheet" href="../css/sheetOverlay.css">
+    <link rel="stylesheet" href="../css/typingOverlay.css">
     <title>Document</title>
 </head>
 
@@ -34,8 +35,17 @@
         </div>
     </div>
 
-    <div class="typing-overlay">
-
+    <div class="typing-overlay" tabindex="0">
+        <div class="to-typing-box">
+            <div class="to-typing-area">
+                <div class="to-typing-line">
+                </div>
+            </div>
+        </div>
+        <div class="to-options">
+            <button class="btn btn-danger btn-block to-exit-button">Exit</button>
+            <button class="btn btn-primary btn-block to-save-button">Save</button>
+        </div>
     </div>
     <div class="sheet-overlay d-flex">
         <div class="so-letter-container">

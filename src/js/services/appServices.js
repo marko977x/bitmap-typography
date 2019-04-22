@@ -1,5 +1,5 @@
 import { appStateStream$ } from "../app";
-import { UPPER_A_ASCII } from "../data/constants";
+import { LOWERCASE_A_ASCII_KEY_CODE } from "../data/constants";
 
 export const appControl = {
     onLoadWindow
@@ -27,7 +27,7 @@ function writeSheetDataToAppState(appState, sheet, sheetRow) {
     appState.sheetsMatrix.sheets.push({
         row: sheetRow,
         column: parseInt(sheet.id),
-        letter: String.fromCharCode(UPPER_A_ASCII + asciiOffset),
+        letter: String.fromCharCode(LOWERCASE_A_ASCII_KEY_CODE + asciiOffset),
         cells: getCells(sheet)
     });
 }

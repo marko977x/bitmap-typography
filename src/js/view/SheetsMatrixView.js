@@ -1,5 +1,5 @@
 import { execute } from "../executor";
-import { sheetsMatrixControl } from "../services/sheetMatrixService";
+import { sheetsMatrixControl } from "../services/sheetMatrixServices";
 import { fromEvent } from "rxjs";
 import { filter } from "rxjs/operators";
 

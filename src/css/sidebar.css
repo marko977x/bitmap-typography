@@ -3,12 +3,6 @@
     padding: 1%;
 }
 
-
-#logo-link {
-    max-width: 30%;
-    height: auto;
-}
-
 .letter-window {
     height: 150px;
     width: 150px;
@@ -19,4 +13,3 @@
     text-align: center;
     background-color: whitesmoke;
 }
-

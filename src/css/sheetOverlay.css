@@ -55,6 +55,10 @@
     border: 1px solid #d4d4d4;
 }
 
+.so-cell:hover {
+    border: 2px solid greenyellow;
+}
+
 .delete-button, .exit-button, .next-button, .previous-button {
     margin: 0% 5% 5% 0%;
     width: 40%;

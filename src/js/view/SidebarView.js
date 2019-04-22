@@ -15,7 +15,7 @@ export class SidebarView {
     }
 
     handleButtonsEvent() {
-        this.onClick("clear-bitmap-button", "onClickClearBitmap");
+        this.onClick("clear-bitmap-button", "resetAllCellsColor");
         this.onClick("start-typing-button", "onClickStartTyping");
     }
 

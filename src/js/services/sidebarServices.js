@@ -2,10 +2,10 @@ import { appStateStream$ } from "../app";
 
 export const sidebarControl = {
     onClickStartTyping,
-    onClickClearBitmap
+    resetAllCellsColor
 };
 
-function onClickClearBitmap(appState) {
+function resetAllCellsColor(appState) {
     appState.sheetsMatrix.sheets.forEach(sheet => {
         clearSheetBitmap(sheet);
     });

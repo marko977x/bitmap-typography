@@ -1,10 +1,9 @@
 import { appStateStream$ } from "../app";
+import { UPPER_A_ASCII } from "../data/constants";
 
 export const appControl = {
     onLoadWindow
 }
-
-const LOWER_A_ASCII = 97;
 
 function onLoadWindow(appState) {
     document.querySelectorAll(".sheet-row").forEach(row => {
@@ -28,7 +27,7 @@ function writeSheetDataToAppState(appState, sheet, sheetRow) {
     appState.sheetsMatrix.sheets.push({
         row: sheetRow,
         column: parseInt(sheet.id),
-        letter: String.fromCharCode(LOWER_A_ASCII + asciiOffset),
+        letter: String.fromCharCode(UPPER_A_ASCII + asciiOffset),
         cells: getCells(sheet)
     });
 }

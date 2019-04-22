@@ -19,6 +19,10 @@
     border: 1px solid gray;
 }
 
+.sheet:hover {
+    border: 1px solid greenyellow;
+}
+
 .cell-row {
     display: flex;
     justify-content: center;

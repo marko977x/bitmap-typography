@@ -60,7 +60,7 @@ export class SheetsMatrixView {
             filter(() => this.state.appIsLoaded)
         ).subscribe(() => {
             execute(sheetsMatrixControl, {
-                action: "onMouseEnterSheet",
+                action: "setHoveredSheet",
                 parameters: [this.state, row, column]
             });
         });
@@ -71,7 +71,7 @@ export class SheetsMatrixView {
             filter(() => this.state.appIsLoaded)
         ).subscribe(() => {
             execute(sheetsMatrixControl, {
-                action: "onMouseLeaveSheet",
+                action: "clearHoveredSheet",
                 parameters: [this.state]
             });
         });
@@ -82,7 +82,7 @@ export class SheetsMatrixView {
             filter(() => this.state.appIsLoaded)
         ).subscribe(() => {
             execute(sheetsMatrixControl, {
-                action: "onMouseClickSheet",
+                action: "setOpenedSheet",
                 parameters: [this.state, row, column]
             });
         });

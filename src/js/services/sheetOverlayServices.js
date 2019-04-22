@@ -1,14 +1,14 @@
 import { appStateStream$ } from "../app";
 
 export const sheetOverlayControl = {
-    onClickCell,
-    onClickExitButton,
-    onClickDeleteButton,
-    onClickNextButton,
-    onClickPreviousButton
+    changeCellColor,
+    hideSheetOverlay,
+    resetCellsColor,
+    showNextSheet,
+    showPreviousSheet
 }
 
-function onClickCell(appState, row, column) {
+function changeCellColor(appState, row, column) {
     const cell = appState.getCell(
         { row: appState.openedSheet.row, column: appState.openedSheet.column },
         { row: row, column: column }
@@ -19,12 +19,12 @@ function onClickCell(appState, row, column) {
     appStateStream$.next(appState);
 }
 
-function onClickExitButton(appState) {
+function hideSheetOverlay(appState) {
     appState.sheetOverlayIsShown = false;
     appStateStream$.next(appState);
 }
 
-function onClickDeleteButton(appState) {
+function resetCellsColor(appState) {
     const sheet = appState.getSheet(
         appState.openedSheet.row, appState.openedSheet.column);
 
@@ -35,7 +35,7 @@ function onClickDeleteButton(appState) {
     appStateStream$.next(appState);
 }
 
-function onClickNextButton(appState) {
+function showNextSheet(appState) {
     if (!lastCell(appState)) {
         appState.openedSheet.column++;
         if (appState.openedSheet.column == appState.sheetsMatrix.columns) {
@@ -52,7 +52,7 @@ function lastCell(state) {
         state.openedSheet.column == state.sheetsMatrix.count - 1;
 }
 
-function onClickPreviousButton(appState) {
+function showPreviousSheet(appState) {
     if (!firstCell(appState)) {
         appState.openedSheet.column -= 1;
         if (appState.openedSheet.column == -1) {

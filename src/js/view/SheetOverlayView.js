@@ -77,17 +77,17 @@ export class SheetOverlayView {
     onClickCell(cell, row, column) {
         fromEvent(cell, 'mousedown').subscribe(() => {
             execute(sheetOverlayControl, {
-                action: "onClickCell",
+                action: "changeCellColor",
                 parameters: [this.state, row, column]
             })
         })
     }
 
     defineButtonsEvents() {
-        this.onClick("exit-button", "onClickExitButton");
-        this.onClick("delete-button", "onClickDeleteButton");
-        this.onClick("next-button", "onClickNextButton");
-        this.onClick("previous-button", "onClickPreviousButton");
+        this.onClick("exit-button", "hideSheetOverlay");
+        this.onClick("delete-button", "resetCellsColor");
+        this.onClick("next-button", "showNextSheet");
+        this.onClick("previous-button", "showPreviousSheet");
     }
 
     onClick(buttonClassName, action) {

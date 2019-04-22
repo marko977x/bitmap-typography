@@ -1,12 +1,12 @@
 import { appStateStream$ } from "../app";
 
 export const sheetsMatrixControl = {
-    onMouseEnterSheet,
-    onMouseLeaveSheet,
-    onMouseClickSheet
+    setHoveredSheet,
+    clearHoveredSheet,
+    setOpenedSheet
 };
 
-function onMouseEnterSheet(appState, row, column) {
+function setHoveredSheet(appState, row, column) {
     appState.hoveredSheet.row = row;
     appState.hoveredSheet.column = column;
     appState.hoveredSheet.letter = appState.getSheet(row, column).letter;
@@ -14,7 +14,7 @@ function onMouseEnterSheet(appState, row, column) {
     appStateStream$.next(appState);
 }
 
-function onMouseLeaveSheet(appState) {
+function clearHoveredSheet(appState) {
     appState.hoveredSheet.row = -1;
     appState.hoveredSheet.column = -1;
     appState.hoveredSheet.letter = "";
@@ -22,7 +22,7 @@ function onMouseLeaveSheet(appState) {
     appStateStream$.next(appState);
 }
 
-function onMouseClickSheet(appState, row, column) {
+function setOpenedSheet(appState, row, column) {
     appState.openedSheet.row = row;
     appState.openedSheet.column = column;
     appState.sheetOverlayIsShown = true;

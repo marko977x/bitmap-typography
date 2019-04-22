@@ -1,5 +1,5 @@
-import { partition, map, filter } from "rxjs/operators";
-import { fromEvent } from "rxjs";
+import { map, filter } from "rxjs/operators";
+import { fromEvent, merge } from "rxjs";
 import { execute } from "../executor";
 import { typingOverlayControl } from "../services/typingOverlayServices";
 import {
@@ -71,24 +71,21 @@ export class TypingOverlayView {
         const keyDown = fromEvent(this.typingOverlay, 'keydown');
         const keyUp = fromEvent(this.typingOverlay, 'keyup');
 
-        (keyDown, keyUp).pipe(
+        const addLetter = (keyDown, keyUp).pipe(
             map(event => event.key.charCodeAt(0)),
             filter(code => code >= LOWERCASE_A_ASCII_KEY_CODE &&
-                code <= LOWERCASE_Z_ASCII_KEY_CODE)
-        ).subscribe(key => {
-            execute(typingOverlayControl, {
-                action: "addLetter",
-                parameters: [this.state, key]
-            })
-        });
+                code <= LOWERCASE_Z_ASCII_KEY_CODE),
+            map(code => ({ key: code, action: "addLetter" })));
 
-        (keyDown, keyUp).pipe(
+        const removeLetter = (keyDown, keyUp).pipe(
             map(event => parseInt(event.keyCode)),
-            filter(code => code == BACKSPACE_ASCII_KEY_CODE)
-        ).subscribe(() => {
+            filter(code => code == BACKSPACE_ASCII_KEY_CODE),
+            map(code => ({ key: code, action: "removeLastLetter" })));
+
+        merge(addLetter, removeLetter).subscribe(command => {
             execute(typingOverlayControl, {
-                action: "removeLastLetter",
-                parameters: [this.state]
+                action: command.action,
+                parameters: [this.state, command.key]
             })
         });
     }
@@ -101,6 +98,6 @@ export class TypingOverlayView {
                 action: "hideOverlay",
                 parameters: [this.state]
             })
-        })
+        });
     }
 } 

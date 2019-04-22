@@ -8,6 +8,7 @@ export const typingOverlayControl = {
 }
 
 function addLetter(appState, keyCode) {
+    console.log("add");
     const sheetIndex = parseInt(keyCode) - LOWERCASE_A_ASCII_KEY_CODE;
     appState.typedText.count++;
     appState.typedText.lastAddedSheedIndex = sheetIndex;
@@ -16,6 +17,7 @@ function addLetter(appState, keyCode) {
 }
 
 function removeLastLetter(appState) {
+    console.log("Called");
     if (appState.typedText.count > 0) {
         appState.typedText.count--;
         appStateStream$.next(appState);

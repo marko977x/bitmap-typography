@@ -1,12 +1,13 @@
 import { appStateStream$ } from "../app";
 import { LOWERCASE_A_ASCII_KEY_CODE } from "../data/constants";
+import { from } from "rxjs";
 
 export const appControl = {
     onLoadWindow
 }
 
 function onLoadWindow(appState) {
-    document.querySelectorAll(".sheet-row").forEach(row => {
+    from(document.querySelectorAll(".sheet-row")).subscribe(row => {
         writeSheetRowDataToAppState(appState, row);
     });
 
@@ -15,7 +16,7 @@ function onLoadWindow(appState) {
 }
 
 function writeSheetRowDataToAppState(appState, row) {
-    row.childNodes.forEach(sheet => {
+    from(row.childNodes).subscribe(sheet => {
         writeSheetDataToAppState(appState, sheet, parseInt(row.id));
     });
 }

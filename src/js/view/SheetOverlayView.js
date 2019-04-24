@@ -41,7 +41,7 @@ export class SheetOverlayView {
 
     createCells(state) {
         for (let row = 0; row < state.sheet.rows; row++) {
-            const rowContainer = this.appendRow(this.board, row);
+            const rowContainer = this.createRow(row);
             for (let column = 0; column < state.sheet.columns; column++) {
                 const cellData = state.getCell(
                     { row: state.openedSheet.row, column: state.openedSheet.column },
@@ -52,12 +52,12 @@ export class SheetOverlayView {
         }
     }
 
-    appendRow(container, id) {
+    createRow(id) {
         const row = document.createElement("div");
         row.className = "so-cell-row";
         row.style.height = 100 / this.state.sheet.rows + '%';
         row.id = id;
-        container.appendChild(row);
+        this.board.appendChild(row);
         return row;
     }
 

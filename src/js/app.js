@@ -1,6 +1,5 @@
-import { fromEvent } from "rxjs";
 import { AppState } from "./data/AppState";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, fromEvent } from "rxjs";
 import { SheetsMatrixView } from "./view/SheetsMatrixView";
 import { SheetView } from "./view/SheetView";
 import { SheetOverlayView } from "./view/SheetOverlayView";

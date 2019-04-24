@@ -7,11 +7,14 @@ import {
     LETTER_WIDTH_HEIGHT_PX, LOWERCASE_A_ASCII_KEY_CODE, LOWERCASE_Z_ASCII_KEY_CODE,
     BACKSPACE_ASCII_KEY_CODE
 } from "../data/constants";
+import html2canvas from 'html2canvas';
 
 export class TypingOverlayView {
     constructor(appStateStream$) {
         this.typingOverlay = document.querySelector(".typing-overlay");
         this.typingLine = document.querySelector(".to-typing-line");
+        this.exitButton = document.querySelector(".to-exit-button");
+        this.saveButton = document.querySelector(".to-save-button");
 
         this.handleAppStateStream(appStateStream$);
         this.handleTypingRendering();
@@ -91,13 +94,23 @@ export class TypingOverlayView {
     }
 
     defineButtonsEvents() {
-        const exitButton = document.querySelector(".to-exit-button");
-
-        fromEvent(exitButton, 'click').subscribe(() => {
+        fromEvent(this.exitButton, 'click').subscribe(() => {
             execute(typingOverlayControl, {
                 action: "hideOverlay",
                 parameters: [this.state]
             })
         });
+
+        fromEvent(this.saveButton, 'click').subscribe(() => {
+            html2canvas(this.typingLine).then(canvas => {
+                var tmpLink = document.createElement('a');  
+                tmpLink.download = 'image.png';  
+                tmpLink.href = canvas.toDataURL("image/png");
+
+                document.body.appendChild(tmpLink);
+                tmpLink.click();
+                document.body.removeChild(tmpLink);
+            })
+        })
     }
 } 

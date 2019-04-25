@@ -1,4 +1,4 @@
-import { partition, map } from "rxjs/operators";
+import { partition } from "rxjs/operators";
 import { CLICKED_CELL_COLOR, DEFAULT_CELL_COLOR } from "../data/constants";
 import { range, from } from "rxjs";
 
@@ -27,22 +27,9 @@ export class SheetView {
     }
 
     createCells(sheet) {
-        range(0, this.state.sheet.rows).pipe(
-            map(row => this.createCellRow(sheet, row))
-        ).subscribe(rowContainer => {
-            range(0, this.state.sheet.columns).subscribe(column => {
-                this.createCell(rowContainer, column);
-            });
+        range(0, this.state.sheet.count).subscribe(cellId => {
+            this.createCell(sheet, cellId);
         });
-    }
-
-    createCellRow(container, id) {
-        const row = document.createElement("div");
-        row.className = "cell-row";
-        row.style.height = 100 / this.state.sheet.rows + '%';
-        row.id = id;
-        container.appendChild(row);
-        return row;
     }
 
     createCell(container, id) {
@@ -60,22 +47,13 @@ export class SheetView {
     }
 
     updateSheet(state, sheet) {
-        from(sheet.childNodes).subscribe(cellRow => {
-            this.updateCellRow(state, sheet, cellRow);
-        });
-    }
-
-    updateCellRow(state, sheet, cellRow) {
-        from(cellRow.childNodes).subscribe(cell => {
+        from(sheet.childNodes).subscribe(cell => {
             this.updateCell(state, sheet, cell);
         });
     }
 
     updateCell(state, sheet, cell) {
-        const cellData = state.getCell(
-            { row: parseInt(sheet.parentNode.id), column: parseInt(sheet.id) },
-            { row: parseInt(cell.parentNode.id), column: parseInt(cell.id) }
-        );
+        const cellData = state.getCell(parseInt(sheet.id), parseInt(cell.id));
         cell.style.backgroundColor = cellData.isColored ?
             CLICKED_CELL_COLOR : DEFAULT_CELL_COLOR;
     }

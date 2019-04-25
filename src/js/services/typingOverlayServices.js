@@ -10,7 +10,7 @@ export const typingOverlayControl = {
 function addLetter(appState, keyCode) {
     const sheetIndex = parseInt(keyCode) - LOWERCASE_A_ASCII_KEY_CODE;
     appState.typedText.count++;
-    appState.typedText.lastAddedSheedIndex = sheetIndex;
+    appState.typedText.lastAddedSheetIndex = sheetIndex;
 
     appStateStream$.next(appState);
 }
@@ -24,7 +24,7 @@ function removeLastLetter(appState) {
 
 function hideOverlay(appState) {
     appState.typingOverlayIsShown = false;
-    appState.typedText.lastAddedSheedIndex = -1;
+    appState.typedText.lastAddedSheetIndex = -1;
     appState.typedText.count = 0;
     appStateStream$.next(appState);
 }

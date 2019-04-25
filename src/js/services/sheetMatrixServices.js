@@ -6,25 +6,22 @@ export const sheetsMatrixControl = {
     setOpenedSheet
 };
 
-function setHoveredSheet(appState, row, column) {
-    appState.hoveredSheet.row = row;
-    appState.hoveredSheet.column = column;
-    appState.hoveredSheet.letter = appState.getSheet(row, column).letter;
+function setHoveredSheet(appState, id) {
+    appState.hoveredSheet.id = id
+    appState.hoveredSheet.letter = appState.sheetsMatrix.sheets[id].letter;
 
     appStateStream$.next(appState);
 }
 
 function clearHoveredSheet(appState) {
-    appState.hoveredSheet.row = -1;
-    appState.hoveredSheet.column = -1;
+    appState.hoveredSheet.id = -1;
     appState.hoveredSheet.letter = "";
 
     appStateStream$.next(appState);
 }
 
-function setOpenedSheet(appState, row, column) {
-    appState.openedSheet.row = row;
-    appState.openedSheet.column = column;
+function setOpenedSheet(appState, id) {
+    appState.openedSheet.id = id;
     appState.sheetOverlayIsShown = true;
 
     appStateStream$.next(appState);

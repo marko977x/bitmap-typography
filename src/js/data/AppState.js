@@ -2,30 +2,28 @@ export class AppState {
 
     constructor() {
         this.sheetsMatrix = {
-            rows: 4,
-            columns: 7,
+            id: -1,
             count: 26,
             sheets: []
         };
 
         this.sheet = {
+            count: 16,
             rows: 4,
-            columns: 4,
+            columns: 4
         };
 
         this.openedSheet = {
-            row: -1,
-            column: -1
+            id: -1
         };
 
         this.hoveredSheet = {
-            row: -1,
-            column: -1,
+            id: -1,
             letter: ""
         };
 
         this.typedText = {
-            lastAddedSheedIndex: -1,
+            lastAddedSheetIndex: -1,
             count: 0
         }
 
@@ -34,13 +32,11 @@ export class AppState {
         this.typingOverlayIsShown = false;
     }
 
-    getSheet(row, column) {
-        return this.sheetsMatrix.sheets[row * this.sheetsMatrix.columns + column];
+    getSheet(id) {
+        return this.sheetsMatrix.sheets[id];
     }
 
-    getCell(sheet, cell) {
-        return this.getSheet(sheet.row, sheet.column).cells[
-            cell.row * this.sheet.columns + cell.column
-        ];
+    getCell(sheetId, cellId) {
+        return this.getSheet(sheetId).cells[cellId];
     }
 }

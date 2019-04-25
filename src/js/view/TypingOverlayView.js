@@ -13,8 +13,6 @@ export class TypingOverlayView {
     constructor(appStateStream$) {
         this.typingOverlay = document.querySelector(".typing-overlay");
         this.typingLine = document.querySelector(".to-typing-line");
-        this.exitButton = document.querySelector(".to-exit-button");
-        this.saveButton = document.querySelector(".to-save-button");
 
         this.handleAppStateStream(appStateStream$);
         this.handleTypingRendering();
@@ -32,7 +30,7 @@ export class TypingOverlayView {
 
         appStateStream$.pipe(
             filter(state => state.typedText.count > this.typingLine.children.length),
-            map(state => state.sheetsMatrix.sheets[state.typedText.lastAddedSheedIndex])
+            map(state => state.sheetsMatrix.sheets[state.typedText.lastAddedSheetIndex])
         ).subscribe(sheet => this.drawLetter(sheet));
 
         appStateStream$.pipe(
@@ -94,14 +92,14 @@ export class TypingOverlayView {
     }
 
     defineButtonsEvents() {
-        fromEvent(this.exitButton, 'click').subscribe(() => {
+        fromEvent(document.querySelector(".to-exit-button"), 'click').subscribe(() => {
             execute(typingOverlayControl, {
                 action: "hideOverlay",
                 parameters: [this.state]
             })
         });
 
-        fromEvent(this.saveButton, 'click').subscribe(() => {
+        fromEvent(document.querySelector(".to-save-button"), 'click').subscribe(() => {
             html2canvas(this.typingLine).then(canvas => {
                 var tmpLink = document.createElement('a');  
                 tmpLink.download = 'image.png';  

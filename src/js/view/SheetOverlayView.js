@@ -1,5 +1,5 @@
 import { partition } from "rxjs/operators";
-import { fromEvent } from "rxjs";
+import { fromEvent, range } from "rxjs";
 import { execute } from "../executor";
 import { sheetOverlayControl } from "../services/sheetOverlayServices";
 import { CLICKED_CELL_COLOR, DEFAULT_CELL_COLOR } from "../data/constants";
@@ -35,50 +35,34 @@ export class SheetOverlayView {
         this.board.innerHTML = "";
         this.createCells(state);
         this.sheetOverlay.style.height = "100%";
-        this.letterWindow.innerHTML = state.getSheet(
-            state.openedSheet.row, state.openedSheet.column).letter;
+        this.letterWindow.innerHTML = state.getSheet(state.openedSheet.id).letter;
     }
 
     createCells(state) {
-        for (let row = 0; row < state.sheet.rows; row++) {
-            const rowContainer = this.createRow(row);
-            for (let column = 0; column < state.sheet.columns; column++) {
-                const cellData = state.getCell(
-                    { row: state.openedSheet.row, column: state.openedSheet.column },
-                    { row: row, column: column }
-                );
-                this.createCell(rowContainer, column, cellData);
-            }
-        }
+        range(0, state.sheet.count).subscribe(cellId => {
+            const cellData = state.getCell(state.openedSheet.id, cellId);
+            this.createCell(cellData);
+        })
     }
 
-    createRow(id) {
-        const row = document.createElement("div");
-        row.className = "so-cell-row";
-        row.style.height = 100 / this.state.sheet.rows + '%';
-        row.id = id;
-        this.board.appendChild(row);
-        return row;
-    }
-
-    createCell(container, id, cellData) {
+    createCell(cellData) {
         const cell = document.createElement("div");
         cell.className = "so-cell";
         cell.style.backgroundColor = cellData.isColored ?
             CLICKED_CELL_COLOR : DEFAULT_CELL_COLOR;
         cell.style.width = 100 / this.state.sheet.columns + '%';
-        cell.id = id;
+        cell.id = cellData.id;
 
-        this.onClickCell(cell, parseInt(container.id), id);
+        this.onClickCell(cell, cellData.id);
 
-        container.appendChild(cell);
+        this.board.appendChild(cell);
     }
 
-    onClickCell(cell, row, column) {
+    onClickCell(cell, id) {
         fromEvent(cell, 'mousedown').subscribe(() => {
             execute(sheetOverlayControl, {
                 action: "changeCellColor",
-                parameters: [this.state, row, column]
+                parameters: [this.state, id]
             })
         })
     }

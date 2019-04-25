@@ -39,6 +39,8 @@
     width: 400px;
     border: 2px solid white;
     border-radius: 1%;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .so-options {
@@ -46,17 +48,12 @@
     margin-top: 5%;
 }
 
-.so-cell-row {
-    display: flex;
-    justify-content: center;
-}
-
 .so-cell {
     border: 1px solid #d4d4d4;
 }
 
 .so-cell:hover {
-    border: 2px solid greenyellow;
+    border: 1px solid greenyellow;
 }
 
 .delete-button, .exit-button, .next-button, .previous-button {

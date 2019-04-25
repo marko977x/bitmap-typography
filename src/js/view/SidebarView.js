@@ -17,6 +17,7 @@ export class SidebarView {
     handleButtonsEvent() {
         this.onClick("clear-bitmap-button", "resetAllCellsColor");
         this.onClick("start-typing-button", "onClickStartTyping");
+        
         fromEvent(document.querySelector(".start-typing-button"), 'click').subscribe(() => {
             document.querySelector(".typing-overlay").style.height = '100%';
         });

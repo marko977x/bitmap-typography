@@ -1,5 +1,5 @@
 import { map, filter } from "rxjs/operators";
-import { fromEvent, merge } from "rxjs";
+import { fromEvent, merge, interval } from "rxjs";
 import { execute } from "../executor";
 import { typingOverlayControl } from "../services/typingOverlayServices";
 import {
@@ -22,25 +22,36 @@ export class TypingOverlayView {
     handleAppStateStream(appStateStream$) {
         appStateStream$.subscribe(state => this.state = state);
 
-        appStateStream$.pipe(
-            map(state => state.typingOverlayIsShown)
-        ).subscribe(overlayVisibility => {
+        const displayOverlay = appStateStream$.pipe(
+            map(state => state.typingOverlayIsShown));
+            
+        const insertLetter = appStateStream$.pipe(
+            filter(state => state.typedText.count > this.calculateLetters()),
+            map(state => state.sheetsMatrix.sheets[state.typedText.lastAddedSheetIndex]));
+                
+        const removeLetter = appStateStream$.pipe(
+            filter(state => state.typedText.count < this.calculateLetters()));
+
+        displayOverlay.subscribe(overlayVisibility => {
             this.displayOverlay(overlayVisibility);
         });
 
-        appStateStream$.pipe(
-            filter(state => state.typedText.count > this.typingLine.children.length),
-            map(state => state.sheetsMatrix.sheets[state.typedText.lastAddedSheetIndex])
-        ).subscribe(sheet => this.drawLetter(sheet));
+        insertLetter.subscribe(sheet => this.drawLetter(sheet));
 
-        appStateStream$.pipe(
-            filter(state => state.typedText.count < this.typingLine.children.length)
-        ).subscribe(() => this.removeLastLetter());
+        removeLetter.subscribe(() => this.removeLastLetter());
+
+        merge(insertLetter, removeLetter, displayOverlay)
+            .subscribe(() => this.updateTextCursorPosition());
+    }
+
+    calculateLetters() {
+        return document.querySelectorAll(".to-letter").length;
     }
 
     displayOverlay(overlayVisibility) {
         this.typingOverlay.style.height = overlayVisibility ? '100%' : '0%';
         this.typingLine.innerHTML = overlayVisibility ? this.typingLine.innerHTML : "";
+        this.typingOverlay.focus();
     }
 
     drawLetter(sheet) {
@@ -49,7 +60,6 @@ export class TypingOverlayView {
         letter.style.height = LETTER_WIDTH_HEIGHT_PX + 'px';
         letter.style.width = LETTER_WIDTH_HEIGHT_PX + 'px';
         sheet.cells.forEach(cell => this.drawCell(letter, cell));
-
         this.typingLine.appendChild(letter);
     }
 
@@ -66,6 +76,28 @@ export class TypingOverlayView {
 
     removeLastLetter() {
         this.typingLine.lastChild.remove();
+    }
+
+    updateTextCursorPosition() {
+        let cursor = document.querySelector(".to-text-cursor");
+        if(cursor) cursor.remove();
+        cursor = this.drawTextCursor();
+
+        this.animation(cursor);
+    }
+
+    drawTextCursor() {
+        const cursor = document.createElement("div");
+        cursor.className = "to-text-cursor";
+        cursor.style.height = LETTER_WIDTH_HEIGHT_PX + 'px';
+        this.typingLine.appendChild(cursor);
+        return cursor;
+    }
+
+    animation(cursor) {
+        interval(400).subscribe(value => {
+            cursor.style.opacity = value % 2;
+        });
     }
 
     handleTypingRendering() {

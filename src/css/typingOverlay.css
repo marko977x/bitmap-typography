@@ -55,6 +55,12 @@
     margin: 1px;
 }
 
+.to-text-cursor {
+    height: 20px;
+    width: 5px;
+    background-color: gray;
+    opacity: 0;
+}
 
 @media screen and (max-width: 600px) {
     .typing-overlay {

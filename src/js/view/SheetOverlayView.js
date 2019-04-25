@@ -3,19 +3,21 @@ import { fromEvent, range } from "rxjs";
 import { execute } from "../executor";
 import { sheetOverlayControl } from "../services/sheetOverlayServices";
 import { CLICKED_CELL_COLOR, DEFAULT_CELL_COLOR } from "../data/constants";
+import { appStateStream$ } from "../app";
+import { SheetOverlayActions } from "../data/actions";
 
 export class SheetOverlayView {
 
-    constructor(appStateStream$) {
+    constructor() {
         this.sheetOverlay = document.querySelector(".sheet-overlay");
         this.board = document.querySelector(".so-board");
         this.letterWindow = document.querySelector(".so-letter-window");
 
-        this.handleAppStateStream(appStateStream$);
+        this.handleAppStateStream();
         this.defineButtonsEvents();
     }
 
-    handleAppStateStream(appStateStream$) {
+    handleAppStateStream() {
         const stream$ = appStateStream$.pipe(
             partition(state => state.sheetOverlayIsShown)
         );
@@ -61,17 +63,17 @@ export class SheetOverlayView {
     onClickCell(cell, id) {
         fromEvent(cell, 'mousedown').subscribe(() => {
             execute(sheetOverlayControl, {
-                action: "changeCellColor",
+                action: SheetOverlayActions.CHANGE_CELL_COLOR,
                 parameters: [this.state, id]
             })
         })
     }
 
     defineButtonsEvents() {
-        this.onClick("exit-button", "hideSheetOverlay");
-        this.onClick("delete-button", "resetCellsColor");
-        this.onClick("next-button", "showNextSheet");
-        this.onClick("previous-button", "showPreviousSheet");
+        this.onClick("exit-button", SheetOverlayActions.HIDE_SHEET_OVERLAY);
+        this.onClick("delete-button", SheetOverlayActions.RESET_CELLS_COLOR);
+        this.onClick("next-button", SheetOverlayActions.SHOW_NEXT_SHEET);
+        this.onClick("previous-button", SheetOverlayActions.SHOW_PREVIOUS_SHEET);
     }
 
     onClick(buttonClassName, action) {

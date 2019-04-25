@@ -1,4 +1,4 @@
-import { map, filter } from "rxjs/operators";
+import { map, filter, debounceTime } from "rxjs/operators";
 import { fromEvent, merge, interval } from "rxjs";
 import { execute } from "../executor";
 import { typingOverlayControl } from "../services/typingOverlayServices";
@@ -8,18 +8,23 @@ import {
     BACKSPACE_ASCII_KEY_CODE
 } from "../data/constants";
 import html2canvas from 'html2canvas';
+import { appStateStream$ } from "../app";
+import { TypingOverlayActions } from "../data/actions";
+
+const CURSOR_ANIMATION_DURATION = 400;
+const TYPING_SPEED = 50;
 
 export class TypingOverlayView {
-    constructor(appStateStream$) {
+    constructor() {
         this.typingOverlay = document.querySelector(".typing-overlay");
         this.typingLine = document.querySelector(".to-typing-line");
 
-        this.handleAppStateStream(appStateStream$);
+        this.handleAppStateStream();
         this.handleTypingRendering();
         this.defineButtonsEvents();
     }
 
-    handleAppStateStream(appStateStream$) {
+    handleAppStateStream() {
         appStateStream$.subscribe(state => this.state = state);
 
         const displayOverlay = appStateStream$.pipe(
@@ -75,7 +80,7 @@ export class TypingOverlayView {
     }
 
     removeLastLetter() {
-        this.typingLine.lastChild.remove();
+        this.typingLine.lastChild.previousSibling.remove();
     }
 
     updateTextCursorPosition() {
@@ -95,25 +100,26 @@ export class TypingOverlayView {
     }
 
     animation(cursor) {
-        interval(400).subscribe(value => {
+        interval(CURSOR_ANIMATION_DURATION).subscribe(value => {
             cursor.style.opacity = value % 2;
         });
     }
 
     handleTypingRendering() {
-        const keyDown = fromEvent(this.typingOverlay, 'keydown');
         const keyUp = fromEvent(this.typingOverlay, 'keyup');
 
-        const addLetter = (keyDown, keyUp).pipe(
+        const addLetter = (keyUp).pipe(
             map(event => event.key.charCodeAt(0)),
             filter(code => code >= LOWERCASE_A_ASCII_KEY_CODE &&
                 code <= LOWERCASE_Z_ASCII_KEY_CODE),
-            map(code => ({ key: code, action: "addLetter" })));
+            debounceTime(TYPING_SPEED),
+            map(code => ({ key: code, action: TypingOverlayActions.ADD_LETTER })));
 
-        const removeLetter = (keyDown, keyUp).pipe(
+        const removeLetter = (keyUp).pipe(
             map(event => parseInt(event.keyCode)),
             filter(code => code == BACKSPACE_ASCII_KEY_CODE),
-            map(code => ({ key: code, action: "removeLastLetter" })));
+            debounceTime(TYPING_SPEED),
+            map(code => ({ key: code, action: TypingOverlayActions.REMOVE_LAST_LETTER })));
 
         merge(addLetter, removeLetter).subscribe(command => {
             execute(typingOverlayControl, {
@@ -126,7 +132,7 @@ export class TypingOverlayView {
     defineButtonsEvents() {
         fromEvent(document.querySelector(".to-exit-button"), 'click').subscribe(() => {
             execute(typingOverlayControl, {
-                action: "hideOverlay",
+                action: TypingOverlayActions.HIDE_OVERLAY,
                 parameters: [this.state]
             })
         });

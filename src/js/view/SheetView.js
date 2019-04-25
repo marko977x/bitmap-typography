@@ -1,10 +1,11 @@
 import { partition } from "rxjs/operators";
 import { CLICKED_CELL_COLOR, DEFAULT_CELL_COLOR } from "../data/constants";
 import { range, from } from "rxjs";
+import { appStateStream$ } from "../app";
 
 export class SheetView {
 
-    constructor(appStateStream$) {
+    constructor() {
         const stream = appStateStream$.pipe(
             partition(state => !state.appIsLoaded));
 
@@ -16,8 +17,8 @@ export class SheetView {
             this.render();
         });
 
-        updateSheets.subscribe(state => {
-            this.updateSheets(state)
+        updateSheets.subscribe(() => {
+            this.updateSheets();
         });
     }
 
@@ -40,20 +41,20 @@ export class SheetView {
         container.appendChild(cell);
     }
 
-    updateSheets(state) {
+    updateSheets() {
         from(document.querySelectorAll(".sheet")).subscribe(sheet => {
-            this.updateSheet(state, sheet);
+            this.updateSheet(sheet);
         });
     }
 
-    updateSheet(state, sheet) {
+    updateSheet(sheet) {
         from(sheet.childNodes).subscribe(cell => {
-            this.updateCell(state, sheet, cell);
+            this.updateCell(sheet, cell);
         });
     }
 
-    updateCell(state, sheet, cell) {
-        const cellData = state.getCell(parseInt(sheet.id), parseInt(cell.id));
+    updateCell(sheet, cell) {
+        const cellData = this.state.getCell(parseInt(sheet.id), parseInt(cell.id));
         cell.style.backgroundColor = cellData.isColored ?
             CLICKED_CELL_COLOR : DEFAULT_CELL_COLOR;
     }

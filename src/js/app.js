@@ -7,19 +7,20 @@ import { execute } from "./executor";
 import { appControl } from "./services/appServices";
 import { SidebarView } from "./view/SidebarView";
 import { TypingOverlayView } from "./view/TypingOverlayView";
+import { AppActions } from "./data/actions";
 
 const appState = new AppState();
 export const appStateStream$ = new BehaviorSubject(appState);
 
-new SheetsMatrixView(appStateStream$, appState);
-new SheetView(appStateStream$);
-new SheetOverlayView(appStateStream$);
-new SidebarView(appStateStream$);
-new TypingOverlayView(appStateStream$);
+new SheetsMatrixView();
+new SheetView();
+new SheetOverlayView();
+new SidebarView();
+new TypingOverlayView();
 
 fromEvent(window, 'onload').subscribe(
     execute(appControl, {
-        action: "onLoadWindow",
+        action: AppActions.ON_LOAD_WINDOW,
         parameters: [appState]
     })
 );

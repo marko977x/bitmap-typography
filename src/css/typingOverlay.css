@@ -54,3 +54,23 @@
     flex-wrap: wrap;
     margin: 1px;
 }
+
+
+@media screen and (max-width: 600px) {
+    .typing-overlay {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    
+    .to-options {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        flex-basis: 10%;
+    }
+
+    .to-exit-button, .to-save-button {
+        height: 40px;
+        margin: 2%;
+    }
+}

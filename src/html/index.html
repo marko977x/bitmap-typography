@@ -7,7 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/mainContent.css">
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/sheetsMatrix.css">
     <link rel="stylesheet" href="../css/sidebar.css">
     <link rel="stylesheet" href="../css/sheetOverlay.css">
     <link rel="stylesheet" href="../css/typingOverlay.css">
@@ -15,21 +16,23 @@
 </head>
 
 <body>
-    <div class="d-flex flex-row">
-        <div class="bg-white border-right border-dark sidebar">
+    <div class="main-content">
+        <div class="bg-white sidebar">
             <div class="toast-header">
-                <h3 class="text-center text-capitalize text-nowrap">Bitmap Typographer
+                <h3 class="text-center text-capitalize text-wrap">Bitmap Typographer
                 </h3>
             </div>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center letter-window-container">
                 <div class="m-2 border border-secondary rounded letter-window">
                 </div>
             </div>
-            <button class="btn btn-primary btn-block start-typing-button">Start Typing</button>
-            <button class="btn btn-danger btn-block clear-bitmap-button">Clear Bitmap</button>
+            <div class="sidebar-options">
+                <button class="btn btn-primary btn-block start-typing-button">Start Typing</button>
+                <button class="btn btn-danger btn-block clear-bitmap-button">Clear Bitmap</button>
+            </div>
         </div>
 
-        <div class="bg-light sheets-container ">
+        <div class="bg-light sheets-container overflow-auto">
 
         </div>
     </div>
@@ -42,18 +45,18 @@
             </div>
         </div>
         <div class="to-options">
-            <button class="btn btn-danger btn-block to-exit-button">Exit</button>
-            <button class="btn btn-primary btn-block to-save-button">Save</button>
+            <button class="btn btn-danger to-exit-button">Exit</button>
+            <button class="btn btn-primary to-save-button">Save</button>
         </div>
     </div>
-    <div class="sheet-overlay d-flex">
+    <div class="sheet-overlay">
         <div class="so-letter-container">
             <div class="so-letter-window"></div>
         </div>
         <div class="so-board-container">
             <div class="so-board"></div>
         </div>
-        <div class="so-options d-flex flex-column">
+        <div class="so-options">
             <button class="btn btn-warning exit-button">Exit</button>
             <button class="btn btn-danger delete-button">Delete</button>
             <button class="btn btn-primary next-button">Next</button>

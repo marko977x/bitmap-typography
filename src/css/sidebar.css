@@ -1,15 +1,41 @@
 .sidebar {
+    display: flex;
+    flex-direction: column;
     flex-basis: 25%;
+    min-width: 250px;
+    height: 50%;
     padding: 1%;
 }
 
+.toast-header {
+    flex-basis: 10%;
+    justify-content: center;
+}
+
+.sidebar-options {
+    flex-basis: 20%;
+}
+
+.letter-window-container {
+    flex-basis: 60%;
+}
+
 .letter-window {
-    height: 150px;
-    width: 150px;
-    min-width: 100px;
-    min-height: 100px;
-    line-height: 150px;
+    min-width: 50%;
+    min-height: 80%;
     font-size: 500%;
     text-align: center;
     background-color: whitesmoke;
+}
+
+@media screen and (max-width: 600px) {
+    .sidebar {
+        flex-basis: 50%;
+    }
+
+    .letter-window {
+        min-width: 40%;
+        font-size: 500%;
+    }
+
 }

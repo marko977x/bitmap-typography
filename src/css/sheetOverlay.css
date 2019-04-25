@@ -8,6 +8,8 @@
   z-index: 1;
   transition: 0.5s;
   overflow-x: hidden;
+  display: flex;
+  min-width: 400px;
 }
 
 .so-letter-container {
@@ -35,8 +37,8 @@
 }
 
 .so-board {
-    height: 400px;
-    width: 400px;
+    height: 300px;
+    width: 300px;
     border: 2px solid white;
     border-radius: 1%;
     display: flex;
@@ -46,6 +48,8 @@
 .so-options {
     flex-basis: 25%;
     margin-top: 5%;
+    display: flex;
+    flex-direction: column;
 }
 
 .so-cell {
@@ -58,6 +62,37 @@
 
 .delete-button, .exit-button, .next-button, .previous-button {
     margin: 0% 5% 5% 0%;
-    width: 40%;
+    width: 60%;
     border: 2px solid white;
+}
+
+@media screen and (max-width: 750px) {
+    .sheet-overlay {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .so-letter-container {
+        justify-content: center;
+    }
+
+    .so-board {
+        height: 250px;
+        width: 250px;
+    }
+
+    .so-options {
+        display: flex;
+        flex-direction: row;
+        width: 50%;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 0px;
+    }
+
+    .delete-button, .exit-button, .next-button, .previous-button {
+        height: 40px;
+        flex-basis: 40%;
+        margin: 2%;
+    }
 }

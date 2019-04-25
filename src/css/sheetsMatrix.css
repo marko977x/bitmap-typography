@@ -1,13 +1,16 @@
 .sheets-container {
     flex-basis: 75%;
-    height: 650px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    padding: 1%;
+    border-left: 1px solid gray;
+    height: 100%;
 }
 
 .sheet {
-    width: 11%;
+    width: 111px;
+    height: 111px;
     margin: 1.5%;
     background-color: white;
     display: flex;
@@ -23,12 +26,14 @@
     transform: scale(1.05); 
 }
 
-.cell-row {
-    display: flex;
-    justify-content: center;
-}
-
 .cell {
     background-color: snow;
     border: 1px solid #eeeeee;
+}
+
+@media screen and (max-width: 600px) {
+    .sheets-container {
+        flex-basis: 50%;
+    }
+
 }

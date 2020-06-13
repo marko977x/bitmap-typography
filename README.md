@@ -13,6 +13,7 @@ Steps to run the application:
 
 * Clone the repo.
 * Navigate to the root folder and open a console.
+* Enter the command "npm install" without the quotes.
 * Enter the command "npm run start" without the quotes.
 * Open your browser and enter "localhost:8080" in the URL field.
 
